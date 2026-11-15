@@ -1,0 +1,59 @@
+﻿using hotel_manager.Entities;
+using hotel_manager.Mapping;
+using hotel_manager.Repository;
+using Microsoft.AspNetCore.Identity;
+
+namespace hotel_manager.Service
+{
+    public class ClientService
+    {
+        private readonly ClientRepository _repository;
+        private readonly IPasswordHasher<Client> _passwordHasher;
+
+        public ClientService(
+            ClientRepository repository,
+            IPasswordHasher<Client> passwordHasher)
+        {
+            _repository = repository;
+            _passwordHasher = passwordHasher;
+        }
+
+        public async Task<int> RegisterAsync(
+            CreateClientDto dto,
+            CancellationToken cancellationToken)
+        {
+            var name = dto.Name.Trim();
+            var email = dto.Email.Trim().ToLowerInvariant();
+
+            if (name.Length < 3)
+            {
+                throw new ArgumentException(
+                    "O nome deve ter pelo menos três caracteres.");
+            }
+
+            var emailExists = await _repository.EmailExistsAsync(
+                email,
+                cancellationToken);
+
+            if (emailExists)
+            {
+                throw new InvalidOperationException(
+                    "Já existe um cliente cadastrado com esse e-mail.");
+            }
+
+            var client = new Client
+            {
+                Name = name,
+                Email = email
+            };
+
+            client.PasswordHash = _passwordHasher.HashPassword(
+                client,
+                dto.Password);
+
+            await _repository.AddAsync(client, cancellationToken);
+
+            return client.Id;
+        }
+    }
+}

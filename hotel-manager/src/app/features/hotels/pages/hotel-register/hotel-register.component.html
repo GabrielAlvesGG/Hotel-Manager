@@ -1,0 +1,132 @@
+<main class="register-page">
+  <section class="register-card" aria-labelledby="register-title">
+    <header class="register-header">
+      <span class="eyebrow">Gestão de hotéis</span>
+
+      <h1 id="register-title">Cadastro de hotel</h1>
+
+      <p>Preencha os dados da empresa para cadastrar seu hotel.</p>
+    </header>
+
+    <form
+      class="register-form"
+      [formGroup]="form"
+      (ngSubmit)="register()"
+      [attr.aria-busy]="sending()"
+      novalidate
+    >
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="cnpj">CNPJ</label>
+
+          <input
+            id="cnpj"
+            type="text"
+            formControlName="cnpj"
+            placeholder="Informe o CNPJ da empresa"
+            aria-describedby="cnpj-error"
+            [attr.aria-invalid]="form.controls.cnpj.touched && form.controls.cnpj.invalid"
+            required
+          />
+
+          <small id="cnpj-error" class="field-error">
+            @if (form.controls.cnpj.touched && form.controls.cnpj.invalid) {
+              Informe o CNPJ.
+            }
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="name">Nome do hotel</label>
+
+          <input
+            id="name"
+            type="text"
+            formControlName="name"
+            autocomplete="organization"
+            placeholder="Ex.: Hotel Boa Vista"
+            aria-describedby="name-error"
+            [attr.aria-invalid]="form.controls.name.touched && form.controls.name.invalid"
+            required
+          />
+
+          <small id="name-error" class="field-error">
+            @if (form.controls.name.touched && form.controls.name.invalid) {
+              Informe um nome com pelo menos 3 caracteres.
+            }
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="localization">Localização</label>
+
+          <input
+            id="localization"
+            type="text"
+            formControlName="localization"
+            placeholder="Endereço, cidade e estado"
+            aria-describedby="localization-error"
+            [attr.aria-invalid]="
+              form.controls.localization.touched && form.controls.localization.invalid
+            "
+            required
+          />
+
+          <small id="localization-error" class="field-error">
+            @if (form.controls.localization.touched && form.controls.localization.invalid) {
+              Informe a localização.
+            }
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="hotel-type">Tipo de hotel</label>
+
+          <select
+            id="hotel-type"
+            formControlName="hotelType"
+            aria-describedby="hotel-type-error"
+            [attr.aria-invalid]="form.controls.hotelType.touched && form.controls.hotelType.invalid"
+            required
+          >
+            <option value="" disabled>Selecione o tipo</option>
+            <option value="hotel">Hotel</option>
+            <option value="pousada">Pousada</option>
+            <option value="resort">Resort</option>
+            <option value="hostel">Hostel</option>
+            <option value="apart-hotel">Apart-hotel</option>
+            <option value="hotel-fazenda">Hotel fazenda</option>
+          </select>
+
+          <small id="hotel-type-error" class="field-error">
+            @if (form.controls.hotelType.touched && form.controls.hotelType.invalid) {
+              Selecione o tipo de hotel.
+            }
+          </small>
+        </div>
+      </div>
+
+      <footer class="form-actions">
+        <button class="button-secondary" type="button" [disabled]="sending()" (click)="clear()">
+          Limpar
+        </button>
+
+        <button class="button-primary" type="submit" [disabled]="sending()">
+          {{ sending() ? 'Enviando...' : 'Cadastrar hotel' }}
+        </button>
+      </footer>
+
+      @if (successMessage()) {
+        <p class="feedback-success" role="status">
+          {{ successMessage() }}
+        </p>
+      }
+
+      @if (errorMessage()) {
+        <p class="feedback-error" role="alert">
+          {{ errorMessage() }}
+        </p>
+      }
+    </form>
+  </section>
+</main>
