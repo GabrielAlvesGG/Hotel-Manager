@@ -55,5 +55,33 @@ namespace hotel_manager.Service
 
             return client.Id;
         }
+
+        public async Task<Client?> ValidateCredentialsAsync(
+            LoginClientDto dto,
+            CancellationToken cancellationToken)
+        {
+            var email = dto.Email.Trim().ToLowerInvariant();
+
+            var client = await _repository.GetByEmailAsync(
+                email,
+                cancellationToken);
+
+            if (client is null)
+            {
+                return null;
+            }
+
+            var verification = _passwordHasher.VerifyHashedPassword(
+                client,
+                client.PasswordHash,
+                dto.Password);
+
+            if (verification == PasswordVerificationResult.Failed)
+            {
+                return null;
+            }
+
+            return client;
+        }
     }
 }

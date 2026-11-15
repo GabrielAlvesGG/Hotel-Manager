@@ -22,6 +22,15 @@ namespace hotel_manager.Repository
                 cancellationToken);
         }
 
+        public async Task<Client?> GetByEmailAsync(
+            string email,
+            CancellationToken cancellationToken)
+        {
+            return await _context.Clients.SingleOrDefaultAsync(
+                client => client.Email == email,
+                cancellationToken);
+        }
+
         public async Task AddAsync(
             Client client,
             CancellationToken cancellationToken)
