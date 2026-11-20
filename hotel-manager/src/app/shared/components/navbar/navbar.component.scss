@@ -1,0 +1,139 @@
+:host {
+  display: block;
+}
+
+.header {
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.navbar {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  color: #2563eb;
+  font-size: 22px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.links a {
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #475569;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.links a:hover {
+  background: #f1f5f9;
+  color: #1d4ed8;
+}
+
+.links a.active {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+a:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .links {
+    width: 100%;
+  }
+}
+.logout-button {
+  padding: 10px 14px;
+  border: 1px solid #b91c1c;
+  border-radius: 8px;
+  background: #fff;
+  color: #b91c1c;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.logout-button:hover:not(:disabled) {
+  background: #fef2f2;
+}
+
+.logout-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.logout-button:focus-visible {
+  outline: 2px solid #b91c1c;
+  outline-offset: 3px;
+}
+
+.logout-error {
+  margin: 0;
+  padding: 0 24px 16px;
+  color: #b91c1c;
+}
+
+.links {
+  align-items: center;
+}
+
+.client-name {
+  padding: 10px 0;
+  color: #475569;
+}
+
+.client-menu {
+  position: relative;
+
+  summary {
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: #475569;
+    cursor: pointer;
+  }
+
+  &.active summary,
+  summary:hover {
+    background: #eff6ff;
+    color: #1d4ed8;
+  }
+
+  summary:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 3px;
+  }
+
+  a {
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+  }
+}

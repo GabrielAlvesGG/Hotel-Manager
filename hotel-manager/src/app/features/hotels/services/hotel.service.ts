@@ -1,8 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 
-import { ClientRegisterRequest, ClientRegisterResponse } from '../models/client-register.model';
+import {
+  ClientRegisterRequest,
+  ClientRegisterResponse,
+} from '../models/client-register.model';
+
+interface CsrfResponse {
+  token: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -10,9 +17,31 @@ import { ClientRegisterRequest, ClientRegisterResponse } from '../models/client-
 export class HotelService {
   private readonly http = inject(HttpClient);
 
-  private readonly registerUrl = 'https://localhost:7005/api/client-register';
+  private readonly apiUrl = 'https://localhost:7005';
 
-  register(data: ClientRegisterRequest): Observable<ClientRegisterResponse> {
-    return this.http.post<ClientRegisterResponse>(this.registerUrl, data);
+  register(
+    request: ClientRegisterRequest,
+  ): Observable<ClientRegisterResponse> {
+    return this.http
+      .get<CsrfResponse>(
+        `${this.apiUrl}/api/auth/csrf`,
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        switchMap((csrf) =>
+          this.http.post<ClientRegisterResponse>(
+            `${this.apiUrl}/api/client-register`,
+            request,
+            {
+              withCredentials: true,
+              headers: {
+                'X-CSRF-TOKEN': csrf.token,
+              },
+            },
+          ),
+        ),
+      );
   }
 }

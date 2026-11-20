@@ -1,5 +1,6 @@
-﻿using hotel_manager.Mapping;
+using hotel_manager.Mapping;
 using hotel_manager.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace hotel_manager.Controllers
@@ -13,6 +14,23 @@ namespace hotel_manager.Controllers
         public ClientsController(ClientService service)
         {
             _service = service;
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<ClientListResponse>> List(
+            CancellationToken cancellationToken,
+            [FromQuery] string? search = null,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20)
+        {
+            if (page < 1 || pageSize is < 1 or > 100 ||
+                (page - 1L) * pageSize > int.MaxValue)
+            {
+                return BadRequest(new { message = "Paginação inválida." });
+            }
+
+            return await _service.ListAsync(search?.Trim(), page, pageSize, cancellationToken);
         }
 
         [HttpPost]

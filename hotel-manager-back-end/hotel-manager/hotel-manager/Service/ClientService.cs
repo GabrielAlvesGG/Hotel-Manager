@@ -1,4 +1,4 @@
-﻿using hotel_manager.Entities;
+using hotel_manager.Entities;
 using hotel_manager.Mapping;
 using hotel_manager.Repository;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +16,15 @@ namespace hotel_manager.Service
         {
             _repository = repository;
             _passwordHasher = passwordHasher;
+        }
+
+        public Task<ClientListResponse> ListAsync(
+            string? search,
+            int page,
+            int pageSize,
+            CancellationToken cancellationToken)
+        {
+            return _repository.ListAsync(search, page, pageSize, cancellationToken);
         }
 
         public async Task<int> RegisterAsync(

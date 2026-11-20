@@ -1,5 +1,6 @@
 ﻿using hotel_manager.Data;
 using hotel_manager.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace hotel_manager.Repository
 {

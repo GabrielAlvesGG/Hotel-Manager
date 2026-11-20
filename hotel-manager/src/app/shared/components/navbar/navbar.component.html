@@ -1,0 +1,70 @@
+<header class="header">
+  <nav class="navbar" aria-label="Navegação principal">
+    <a class="brand" routerLink="/login">
+      Hotel Manager
+    </a>
+
+    <div class="links">
+      @if (checkingSession()) {
+        <span role="status">Verificando sessão...</span>
+      } @else {
+        @if (currentClient(); as client) {
+          <span class="client-name">
+            Olá, {{ client.name }}
+          </span>
+
+          <a
+            routerLink="/hoteis/cadastro"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+          >
+            Cadastrar hotel
+          </a>
+
+          <details class="client-menu" routerLinkActive="active" #clientMenu>
+            <summary>Clientes</summary>
+            <a
+              routerLink="/clientes/listagem"
+              routerLinkActive="active"
+              ariaCurrentWhenActive="page"
+              (click)="clientMenu.open = false"
+            >
+              Listagem
+            </a>
+          </details>
+
+          <button
+            type="button"
+            class="logout-button"
+            [disabled]="loggingOut()"
+            (click)="logout()"
+          >
+            {{ loggingOut() ? 'Saindo...' : 'Sair' }}
+          </button>
+        } @else {
+          <a
+            routerLink="/login"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+          >
+            Entrar
+          </a>
+
+          <a
+            routerLink="/clientes/cadastro"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+          >
+            Criar conta
+          </a>
+        }
+      }
+    </div>
+  </nav>
+
+  @if (errorMessage()) {
+    <p class="logout-error" role="alert">
+      {{ errorMessage() }}
+    </p>
+  }
+</header>
